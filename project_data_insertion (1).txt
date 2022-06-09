@@ -1,0 +1,451 @@
+Enter password: *********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 62
+Server version: 8.0.29 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use project;
+Database changed
+mysql> show tables;
++-------------------+
+| Tables_in_project |
++-------------------+
+| employee          |
++-------------------+
+1 row in set (0.01 sec)
+
+mysql> describe employee;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| empID       | int         | NO   |     | NULL    |       |
+| name        | varchar(50) | YES  |     | NULL    |       |
+| Designation | char(1)     | YES  |     | NULL    |       |
+| age         | int         | YES  |     | NULL    |       |
+| aadharno    | varchar(12) | YES  |     | NULL    |       |
+| phno        | varchar(10) | YES  |     | NULL    |       |
+| mineID      | char(1)     | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+
+mysql> create table employee(
+    -> empID primary key,
+    -> name varchar(50),
+    -> designation char not null,
+    -> age int ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'primary key,
+name varchar(50),
+designation char not null,
+age int' at line 2
+mysql> create table employee(
+    -> empID int primary key,
+    -> name varchar(50) not null,
+    -> designation char not null,
+    -> age int not null,
+    -> aadhar_no varchar(12) unique,
+    -> pancard_no varchar(10) unique,
+    -> phn_no varchar(10) unique not null,
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 8
+mysql> create table employee(
+    -> empID int ,
+    -> name varchar(50),
+    -> designation char not null,
+    -> age int ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 5
+mysql> create table employee(
+    -> empID primary key,
+    -> name varchar(50),;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'primary key,
+name varchar(50),' at line 2
+mysql> create table employee(
+    -> empID int,
+    -> name varchar(50) not null,
+    -> designation char not null,
+    -> age int not null,
+    -> aadhar_no varchar(12) unique,
+    -> pancard_no varchar(10) unique,
+    -> phn_no varchar(10) unique not null,
+    -> mineID int not null,
+    -> primary key(empID),
+    -> foreign key(mineID) references ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 11
+mysql> use jproject;
+Database changed
+mysql> create table employee(
+    -> empID int,
+    -> name varchar(50) not null,
+    -> designation char not null,
+    -> age int not null,
+    -> aadhar_no varchar(12) unique,
+    -> pancard_no varchar(10) unique,
+    -> phn_no varchar(10) unique not null,
+    -> mineID int not null,
+    -> primary key(empID),
+    -> foreign key(mineID) references mine(mineID) on delete cascade);
+Query OK, 0 rows affected (1.05 sec)
+
+mysql> show tables;
++--------------------+
+| Tables_in_jproject |
++--------------------+
+| employee           |
+| mine               |
++--------------------+
+2 rows in set (0.00 sec)
+
+mysql> describe employee;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| empID       | int         | NO   | PRI | NULL    |       |
+| name        | varchar(50) | NO   |     | NULL    |       |
+| designation | char(1)     | NO   |     | NULL    |       |
+| age         | int         | NO   |     | NULL    |       |
+| aadhar_no   | varchar(12) | YES  | UNI | NULL    |       |
+| pancard_no  | varchar(10) | YES  | UNI | NULL    |       |
+| phn_no      | varchar(10) | NO   | UNI | NULL    |       |
+| mineID      | int         | NO   | MUL | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+8 rows in set (0.00 sec)
+
+mysql> describe mine;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| mineID    | int         | NO   | PRI | NULL    |       |
+| mine_name | varchar(20) | YES  |     | NULL    |       |
+| survey_no | int         | YES  |     | NULL    |       |
+| type      | varchar(50) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> create table mine_location(
+    -> survey_no int,
+    -> state varchar(30) not null,
+    -> district varchar(30) not null,
+    -> mineID int not null,
+    -> primary key(survey_no,mineID),
+    -> foreign key(;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 7
+mysql> create table mine_location(
+    -> survey_no int,
+    -> state varchar(30) not null,
+    -> district varchar(30) not null,
+    -> mineID int not null,
+    -> primary key(survey_no,mineID));
+Query OK, 0 rows affected (0.79 sec)
+
+mysql> describe mine_location;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| survey_no | int         | NO   | PRI | NULL    |       |
+| state     | varchar(30) | NO   |     | NULL    |       |
+| district  | varchar(30) | NO   |     | NULL    |       |
+| mineID    | int         | NO   | PRI | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> create table mine_parameters(
+    -> type varchar(50),
+    -> Max_temp double not null,
+    -> min_temp double not null,
+    -> Max_humidity double not null,
+    -> min_humidity double not null,
+    -> primary key(type),
+    -> foreign key(type) references mine(type) on delete cascade);
+ERROR 1822 (HY000): Failed to add the foreign key constraint. Missing index for constraint 'mine_parameters_ibfk_1' in the referenced table 'mine'
+mysql> create table mine_parameters(
+    -> type varchar(50),
+    -> Max_temp double not null,
+    -> min_temp double not null,
+    -> Max_humidity double not null,
+    -> min_humidity double not null,
+    -> primary key(type) references mine(type) on delete cascade);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'references mine(type) on delete cascade)' at line 7
+mysql> create table mine_parameters(
+    -> type varchar(50),
+    -> Max_temp double not null,
+    -> min_temp double not null,
+    -> Max_humidity double not null,
+    -> min_humidity double not null,
+    -> primary key(type),
+    -> type refernces mine(type) on delete cascade);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'refernces mine(type) on delete cascade)' at line 8
+mysql> show tables;
++--------------------+
+| Tables_in_jproject |
++--------------------+
+| employee           |
+| mine               |
+| mine_location      |
++--------------------+
+3 rows in set (0.00 sec)
+
+mysql> describe employee;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| empID       | int         | NO   | PRI | NULL    |       |
+| name        | varchar(50) | NO   |     | NULL    |       |
+| designation | char(1)     | NO   |     | NULL    |       |
+| age         | int         | NO   |     | NULL    |       |
+| aadhar_no   | varchar(12) | YES  | UNI | NULL    |       |
+| pancard_no  | varchar(10) | YES  | UNI | NULL    |       |
+| phn_no      | varchar(10) | NO   | UNI | NULL    |       |
+| mineID      | int         | NO   | MUL | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+8 rows in set (0.00 sec)
+
+mysql> describe mine;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| mineID    | int         | NO   | PRI | NULL    |       |
+| mine_name | varchar(20) | YES  |     | NULL    |       |
+| survey_no | int         | YES  |     | NULL    |       |
+| type      | varchar(50) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> describe mine_location;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| survey_no | int         | NO   | PRI | NULL    |       |
+| state     | varchar(30) | NO   |     | NULL    |       |
+| district  | varchar(30) | NO   |     | NULL    |       |
+| mineID    | int         | NO   | PRI | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> alter table mine(
+    -> foreign key(survey_no) references mine_location(survery_no);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(
+foreign key(survey_no) references mine_location(survery_no)' at line 1
+mysql> alter table mine(
+    -> foreign key(survey_no) references mine_location(survery_no) on delete cascade;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(
+foreign key(survey_no) references mine_location(survery_no) on delete cascade' at line 1
+mysql> alter table mine(
+    -> foreign key(survey_no) references mine_location(survery_no) on delete cascade);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(
+foreign key(survey_no) references mine_location(survery_no) on delete cascade)' at line 1
+mysql> create table mine_parameters(
+    -> type varchar(50),
+    -> Max_temp double not null,
+    -> min_temp double not null,
+    -> Max_humidity double not null,
+    -> min_humidity double not null,
+    -> primary key(type);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 7
+mysql> create table mine_parameters(
+    -> type varchar(50),
+    -> Max_temp double not null,
+    -> min_temp double not null,
+    -> Max_humidity double not null,
+    -> min_humidity double not null,
+    -> primary key(type));
+Query OK, 0 rows affected (0.31 sec)
+
+mysql> show tables;
++--------------------+
+| Tables_in_jproject |
++--------------------+
+| employee           |
+| mine               |
+| mine_location      |
+| mine_parameters    |
++--------------------+
+4 rows in set (0.00 sec)
+
+mysql> describe employee;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| empID       | int         | NO   | PRI | NULL    |       |
+| name        | varchar(50) | NO   |     | NULL    |       |
+| designation | char(1)     | NO   |     | NULL    |       |
+| age         | int         | NO   |     | NULL    |       |
+| aadhar_no   | varchar(12) | YES  | UNI | NULL    |       |
+| pancard_no  | varchar(10) | YES  | UNI | NULL    |       |
+| phn_no      | varchar(10) | NO   | UNI | NULL    |       |
+| mineID      | int         | NO   | MUL | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+8 rows in set (0.00 sec)
+
+mysql> describe mine;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| mineID    | int         | NO   | PRI | NULL    |       |
+| mine_name | varchar(20) | YES  |     | NULL    |       |
+| survey_no | int         | YES  |     | NULL    |       |
+| type      | varchar(50) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> describe mine_location;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| survey_no | int         | NO   | PRI | NULL    |       |
+| state     | varchar(30) | NO   |     | NULL    |       |
+| district  | varchar(30) | NO   |     | NULL    |       |
+| mineID    | int         | NO   | PRI | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> describe mine_parameters;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| type         | varchar(50) | NO   | PRI | NULL    |       |
+| Max_temp     | double      | NO   |     | NULL    |       |
+| min_temp     | double      | NO   |     | NULL    |       |
+| Max_humidity | double      | NO   |     | NULL    |       |
+| min_humidity | double      | NO   |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> alter table mine(
+    -> add foreign key(survey_no) references mine_location(survery_no),
+    -> add foreign key(type) references mine_parameters(type) on delete set null);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(
+add foreign key(survey_no) references mine_location(survery_no),
+add foreign k' at line 1
+mysql> alter table mine(
+    -> add foreign key(type) references mine_parameters(type) on delete set null);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(
+add foreign key(type) references mine_parameters(type) on delete set null)' at line 1
+mysql> alter table mine
+    -> add foreign key(type) references mine_parameters(type) on delete set null);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 2
+mysql> alter table mine(
+    -> add foreign key(type) references mine_parameters(type) on delete set null;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(
+add foreign key(type) references mine_parameters(type) on delete set null' at line 1
+mysql> alter table mine
+    -> add foreign key(type) references mine_parameters(type) on delete set null;
+Query OK, 0 rows affected (1.66 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> describe mine;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| mineID    | int         | NO   | PRI | NULL    |       |
+| mine_name | varchar(20) | YES  |     | NULL    |       |
+| survey_no | int         | YES  |     | NULL    |       |
+| type      | varchar(50) | YES  | MUL | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> alter table mine
+    -> add foreign key(survey_no) references mine_location(survey_no) on delete set null;
+Query OK, 0 rows affected (1.56 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> create table employee_login(
+    -> empID int,
+    -> date date,
+    -> time_in time,
+    -> time_out time not null,
+    -> vest_id int,
+    -> status bool,
+    -> designation char not null,
+    -> primary key(empID,date,time_in));
+Query OK, 0 rows affected (0.38 sec)
+
+mysql> create table mine_environment(
+    -> date date,
+    -> time time,
+    -> vest_id int,
+    -> temperature double not null,
+    -> humidity double not null,
+    -> primary key(date,time,vest_id));
+Query OK, 0 rows affected (0.40 sec)
+
+mysql> alter table employee_login
+    -> add foreign key(vest_id) references mine_environment(vest_id);
+ERROR 1822 (HY000): Failed to add the foreign key constraint. Missing index for constraint 'employee_login_ibfk_1' in the referenced table 'mine_environment'
+mysql> alter table employee_login
+    -> add foreign key(vest_id) references mine_environment(vest_id) on delete set null;
+ERROR 1822 (HY000): Failed to add the foreign key constraint. Missing index for constraint 'employee_login_ibfk_1' in the referenced table 'mine_environment'
+mysql> alter table employee_login
+    -> add foreign key(vest_id) references mine_environment(vest_id) on delete set null;
+ERROR 1822 (HY000): Failed to add the foreign key constraint. Missing index for constraint 'employee_login_ibfk_1' in the referenced table 'mine_environment'
+mysql> alter table employee_login
+    -> add foreign key(vest_id) references mine_environment(vest_id) on delete set null;
+ERROR 1822 (HY000): Failed to add the foreign key constraint. Missing index for constraint 'employee_login_ibfk_1' in the referenced table 'mine_environment'
+mysql> alter table employee add username varchar(10);
+Query OK, 0 rows affected (0.38 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table employee add username varchar(10) not null;
+ERROR 1060 (42S21): Duplicate column name 'username'
+mysql> alter table employee modify username varchar(10) not null unique;
+Query OK, 0 rows affected (1.98 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table employee add password varchar(10) not null;
+Query OK, 0 rows affected (0.35 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> describe employee;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| empID       | int         | NO   | PRI | NULL    |       |
+| name        | varchar(50) | NO   |     | NULL    |       |
+| designation | char(1)     | NO   |     | NULL    |       |
+| age         | int         | NO   |     | NULL    |       |
+| aadhar_no   | varchar(12) | YES  | UNI | NULL    |       |
+| pancard_no  | varchar(10) | YES  | UNI | NULL    |       |
+| phn_no      | varchar(10) | NO   | UNI | NULL    |       |
+| mineID      | int         | NO   | MUL | NULL    |       |
+| username    | varchar(10) | NO   | UNI | NULL    |       |
+| password    | varchar(10) | NO   |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+10 rows in set (0.00 sec)
+
+mysql> describe employee_login;
++-------------+------------+------+-----+---------+-------+
+| Field       | Type       | Null | Key | Default | Extra |
++-------------+------------+------+-----+---------+-------+
+| empID       | int        | NO   | PRI | NULL    |       |
+| date        | date       | NO   | PRI | NULL    |       |
+| time_in     | time       | NO   | PRI | NULL    |       |
+| time_out    | time       | NO   |     | NULL    |       |
+| vest_id     | int        | YES  |     | NULL    |       |
+| status      | tinyint(1) | YES  |     | NULL    |       |
+| designation | char(1)    | NO   |     | NULL    |       |
++-------------+------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+
+mysql> describe employee_login;
++-------------+------------+------+-----+---------+-------+
+| Field       | Type       | Null | Key | Default | Extra |
++-------------+------------+------+-----+---------+-------+
+| empID       | int        | NO   | PRI | NULL    |       |
+| date        | date       | NO   | PRI | NULL    |       |
+| time_in     | time       | NO   | PRI | NULL    |       |
+| time_out    | time       | NO   |     | NULL    |       |
+| vest_id     | int        | YES  |     | NULL    |       |
+| status      | tinyint(1) | YES  |     | NULL    |       |
+| designation | char(1)    | NO   |     | NULL    |       |
++-------------+------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+
+mysql> alter table employee_login
+    -> add foreign key(vest_id) references mine_environment(vest_id) on delete set null;
+ERROR 1822 (HY000): Failed to add the foreign key constraint. Missing index for constraint 'employee_login_ibfk_1' in the referenced table 'mine_environment'
+mysql>
